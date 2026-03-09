@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-const MAX_Q = 21;
+const MAX_Q = 20;
 const COUNTRIES = ["Afghanistan","Albania","Algeria","Andorra","Angola","Argentina","Armenia","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bhutan","Bolivia","Bosnia and Herzegovina","Botswana","Brazil","Brunei","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Canada","Cape Verde","Central African Republic","Chad","Chile","China","Colombia","Comoros","Congo","Costa Rica","Croatia","Cuba","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","East Timor","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Eswatini","Ethiopia","Fiji","Finland","France","Gabon","Gambia","Georgia","Germany","Ghana","Greece","Grenada","Guatemala","Guinea","Guinea-Bissau","Guyana","Haiti","Honduras","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Israel","Italy","Ivory Coast","Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kiribati","Kosovo","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Morocco","Mozambique","Myanmar","Namibia","Nauru","Nepal","Netherlands","New Zealand","Nicaragua","Niger","Nigeria","North Korea","North Macedonia","Norway","Oman","Pakistan","Palau","Palestine","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Qatar","Romania","Russia","Rwanda","Samoa","San Marino","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Somalia","South Africa","South Korea","South Sudan","Spain","Sri Lanka","Sudan","Suriname","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Togo","Tonga","Trinidad and Tobago","Tunisia","Turkey","Turkmenistan","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States","Uruguay","Uzbekistan","Vanuatu","Vatican City","Venezuela","Vietnam","Yemen","Zambia","Zimbabwe"];
 const ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 const byLetter = l => COUNTRIES.filter(c => c[0].toUpperCase() === l);
@@ -22,9 +22,9 @@ const GAMES = [
   { id: "country", name: "Country Guesser", emoji: "🌍", color: "#3b82f6",
     desc: "Name all countries starting with a letter",
     rules: "Pick a letter, then try to name EVERY country that starts with it!\n\n🌱 Chill Mode: Get hints when stuck\n🔥 Spicy Mode: No hints, pure memory\n\nTip: 'S' has the most countries!" },
-  { id: "twenty", name: "21 Questions", emoji: "🤔", color: "#8b5cf6",
+  { id: "twenty", name: "20 Questions", emoji: "🤔", color: "#8b5cf6",
     desc: "Classic guessing game",
-    rules: "HOW TO PLAY:\n\n🔍 As GUESSER:\n• Poot thinks of something secret\n• You ask yes/no questions\n• Try to guess it in 21 questions!\n\n🤫 As DECIDER:\n• You think of something\n• Answer Poot's questions\n• Try not to give it away!\n\nTip: Start broad - 'Is it alive?'" },
+    rules: "HOW TO PLAY:\n\n🔍 As GUESSER:\n• Poot thinks of something secret\n• You ask yes/no questions\n• Try to guess it in 20 questions!\n\n🤫 As DECIDER:\n• You think of something\n• Answer Poot's questions\n• Try not to give it away!\n\nTip: Start broad - 'Is it alive?'" },
   { id: "wordchain", name: "Word Chain", emoji: "🔗", color: "#f97316",
     desc: "Link words by last letter",
     rules: "Each word must START with the LAST letter of the previous word!\n\n⏱️ 15 seconds per turn\n❤️ 3 lives total\n🏆 Win when opponent can't continue\n\nExample: Cat → Tiger → Rabbit" },
@@ -154,7 +154,7 @@ function SBChar({char,size=42}) {
 }
 
 // ============================================
-// AI LOGIC FOR 21 QUESTIONS
+// AI LOGIC FOR 20 QUESTIONS
 // ============================================
 function analyzeQuestion(question, secret) {
   const q = question.toLowerCase();
@@ -361,7 +361,7 @@ export default function PootGames() {
   };
 
   // ============================================
-  // 21 QUESTIONS
+  // 20 QUESTIONS
   // ============================================
   const qAskAI = () => {
     if (!qI.trim()) { showT("Type a question!"); return; }
@@ -869,8 +869,8 @@ export default function PootGames() {
           <h2 style={{fontSize:24,fontWeight:700,marginBottom:24,color:T.t}}>{GAMES.find(g=>g.id===game)?.name}</h2>
           <div style={{display:"flex",flexDirection:"column",gap:12,maxWidth:320,margin:"0 auto"}}>
             <Card hover onClick={()=>{setMode("solo");setScr("difficulty");}} style={{display:"flex",alignItems:"center",gap:16,padding:20,cursor:"pointer"}}>
-              <SleepyPanda size={44}/>
-              <div style={{textAlign:"left"}}><h3 style={{fontSize:16,fontWeight:700,margin:0,color:T.t}}>play with poot</h3><p style={{fontSize:12,color:T.tm,margin:0}}>solo vs AI 😴</p></div>
+              <span style={{fontSize:36}}>😴</span>
+              <div style={{textAlign:"left"}}><h3 style={{fontSize:16,fontWeight:700,margin:0,color:T.t}}>play with poot</h3><p style={{fontSize:12,color:T.tm,margin:0}}>solo vs AI</p></div>
             </Card>
             <Card hover onClick={()=>{setMode("multi");setRoom(genCode());setScr("lobby");}} style={{display:"flex",alignItems:"center",gap:16,padding:20,cursor:"pointer"}}>
               <span style={{fontSize:36}}>👯</span>
@@ -970,7 +970,7 @@ export default function PootGames() {
           :<div style={{textAlign:"center"}}><h2 style={{fontSize:20,fontWeight:700,marginBottom:12,color:T.t}}>countries with {cgL}</h2><Progress cur={cgG.length} tot={cgTot}/><p style={{color:T.ts,margin:"12px 0"}}>{cgG.length}/{cgTot}</p><div style={{maxWidth:300,margin:"0 auto"}}><Input value={cgI} onChange={e=>setCgI(e.target.value)} placeholder="type a country..." onKeyDown={e=>e.key==="Enter"&&cgGuess()} style={{marginBottom:12}} autoFocus/><Btn onClick={cgGuess}>guess ✓</Btn>{diff==="easy"&&<Btn v="secondary" onClick={cgClue} disabled={cgCU>=cgMax} style={{marginLeft:8}}>💡 ({cgMax-cgCU})</Btn>}</div>{cgC&&<Card style={{margin:"16px auto",maxWidth:280,background:"rgba(251,191,36,0.1)"}}><p style={{color:T.warn,margin:0}}>💡 {cgC}</p></Card>}{cgG.length>0&&<div style={{display:"flex",flexWrap:"wrap",gap:6,justifyContent:"center",margin:"16px 0"}}>{cgG.map((c,i)=><span key={i} style={{background:T.s,border:`1px solid ${T.b}`,borderRadius:6,padding:"4px 10px",fontSize:12,color:T.p,textTransform:"capitalize"}}>{c}</span>)}</div>}<Btn v="ghost" onClick={()=>setCgD(true)}>give up 🏳️</Btn></div>}
         </div>}
 
-        {/* 21 QUESTIONS */}
+        {/* 20 QUESTIONS */}
         {scr==="twenty"&&<div>
           {qD?<div style={{textAlign:"center",paddingTop:40}}><div style={{fontSize:64,marginBottom:16}}>{qW?"🎉":"😅"}</div><h2 style={{fontSize:28,fontWeight:700,color:T.p,marginBottom:8}}>{qW?"you got it!":"nope!"}</h2><p style={{color:T.ts,marginBottom:24}}>{qW?`"${qS}" correct!`:`it was "${qS}"`}</p><Btn onClick={()=>{setQCat(null);setQS("");setQSI("");setQL([]);setQD(false);setQGM(false);setQFG("");setQW(false);setQCU(0);}}>again 🔄</Btn><Btn v="ghost" onClick={goHome}>home</Btn></div>
           :!qCat?<div style={{textAlign:"center"}}><h2 style={{fontSize:22,fontWeight:700,marginBottom:20,color:T.t}}>pick category</h2><div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:12,maxWidth:280,margin:"0 auto"}}>{CATS.map(c=><Card key={c.id} hover onClick={()=>{setQCat(c);if(mode==="solo"&&qR==="guesser"){setQS(SECRETS[c.id][Math.floor(Math.random()*SECRETS[c.id].length)]);}}} style={{padding:16,textAlign:"center",cursor:"pointer"}}><div style={{fontSize:32}}>{c.emoji}</div><div style={{fontWeight:700,color:T.t,marginTop:8}}>{c.label}</div></Card>)}</div></div>
