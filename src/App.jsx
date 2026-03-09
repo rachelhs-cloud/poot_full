@@ -857,7 +857,7 @@ export default function PootGames() {
           <div style={{display:"flex",flexDirection:"column",gap:12}}>
             {GAMES.map(g=><GameCard key={g.id} game={g} onClick={()=>{
               setGame(g.id);
-              if(g.multiOnly) { setMode("multi"); setRoom(genCode()); setScr("lobby"); }
+              if(g.multiOnly) { setMode("multi"); setScr("playmode_multi"); }
               else setScr("playmode");
             }} onHowTo={setShowHowTo}/>)}
           </div>
@@ -874,10 +874,44 @@ export default function PootGames() {
             </Card>
             <Card hover onClick={()=>{setMode("multi");setRoom(genCode());setScr("lobby");}} style={{display:"flex",alignItems:"center",gap:16,padding:20,cursor:"pointer"}}>
               <span style={{fontSize:36}}>👯</span>
-              <div style={{textAlign:"left"}}><h3 style={{fontSize:16,fontWeight:700,margin:0,color:T.t}}>play with friends</h3><p style={{fontSize:12,color:T.tm,margin:0}}>share code 🔗</p></div>
+              <div style={{textAlign:"left"}}><h3 style={{fontSize:16,fontWeight:700,margin:0,color:T.t}}>host game</h3><p style={{fontSize:12,color:T.tm,margin:0}}>create & share code 🔗</p></div>
+            </Card>
+            <Card hover onClick={()=>{setMode("multi");setJoin("");setScr("joingame");}} style={{display:"flex",alignItems:"center",gap:16,padding:20,cursor:"pointer"}}>
+              <span style={{fontSize:36}}>🎟️</span>
+              <div style={{textAlign:"left"}}><h3 style={{fontSize:16,fontWeight:700,margin:0,color:T.t}}>join game</h3><p style={{fontSize:12,color:T.tm,margin:0}}>enter a friend's code</p></div>
             </Card>
           </div>
           <Btn v="ghost" onClick={()=>setScr("menu")} style={{marginTop:24}}>← back</Btn>
+        </div>}
+
+        {/* MULTI-ONLY PLAY MODE (host or join) */}
+        {scr==="playmode_multi"&&<div style={{textAlign:"center"}}>
+          <div style={{fontSize:56,marginBottom:12}}>{GAMES.find(g=>g.id===game)?.emoji}</div>
+          <h2 style={{fontSize:24,fontWeight:700,marginBottom:24,color:T.t}}>{GAMES.find(g=>g.id===game)?.name}</h2>
+          <p style={{color:T.warn,fontWeight:600,marginBottom:16}}>👥 Multiplayer only!</p>
+          <div style={{display:"flex",flexDirection:"column",gap:12,maxWidth:320,margin:"0 auto"}}>
+            <Card hover onClick={()=>{setRoom(genCode());setScr("lobby");}} style={{display:"flex",alignItems:"center",gap:16,padding:20,cursor:"pointer"}}>
+              <span style={{fontSize:36}}>👯</span>
+              <div style={{textAlign:"left"}}><h3 style={{fontSize:16,fontWeight:700,margin:0,color:T.t}}>host game</h3><p style={{fontSize:12,color:T.tm,margin:0}}>create & share code 🔗</p></div>
+            </Card>
+            <Card hover onClick={()=>{setJoin("");setScr("joingame");}} style={{display:"flex",alignItems:"center",gap:16,padding:20,cursor:"pointer"}}>
+              <span style={{fontSize:36}}>🎟️</span>
+              <div style={{textAlign:"left"}}><h3 style={{fontSize:16,fontWeight:700,margin:0,color:T.t}}>join game</h3><p style={{fontSize:12,color:T.tm,margin:0}}>enter a friend's code</p></div>
+            </Card>
+          </div>
+          <Btn v="ghost" onClick={()=>setScr("menu")} style={{marginTop:24}}>← back</Btn>
+        </div>}
+
+        {/* JOIN GAME */}
+        {scr==="joingame"&&<div style={{textAlign:"center"}}>
+          <div style={{fontSize:48,marginBottom:12}}>{GAMES.find(g=>g.id===game)?.emoji}</div>
+          <h2 style={{fontSize:22,fontWeight:700,marginBottom:8,color:T.t}}>join a game</h2>
+          <p style={{color:T.ts,marginBottom:20}}>enter the host's code:</p>
+          <Card style={{maxWidth:280,margin:"0 auto 24px",padding:20}}>
+            <input value={join} onChange={e=>setJoin(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,6))} placeholder="ABC123" maxLength={6} style={{fontSize:28,fontWeight:700,letterSpacing:6,color:T.p,background:"transparent",border:"none",borderBottom:`2px solid ${T.sh}`,outline:"none",textAlign:"center",width:"100%",padding:"8px 0",fontFamily:"inherit"}}/>
+          </Card>
+          <Btn onClick={()=>{if(join.length>=4){setRoom(join);setScr("difficulty");}else{showT("Code must be at least 4 characters");}}} style={{opacity:join.length>=4?1:0.5}}>join →</Btn>
+          <Btn v="ghost" onClick={()=>setScr("playmode")} style={{marginLeft:8}}>cancel</Btn>
         </div>}
 
         {/* LOBBY */}
